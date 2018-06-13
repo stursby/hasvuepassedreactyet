@@ -3,23 +3,29 @@
     <github-corner/>
     <p>Has Vue passed React yet?</p>
     <template v-if="repos">
-    <h1>{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
-    <ul>
-      <li>
-        <a :href="repos.vue.url" target="_blank">
-          <vue-icon/>
-          <span>{{ repos.vue.stargazers.totalCount | formatNumber }}</span>
-          <star-icon/>
-        </a>
-      </li>
-      <li>
-        <a :href="repos.react.url" target="_blank">
-          <react-icon/>
-          <span>{{ repos.react.stargazers.totalCount | formatNumber }}</span>
-          <star-icon/>
-        </a>
-      </li>
-    </ul>
+      <h1>{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
+      <p>
+        <small
+          v-if="!vueHasPassedReact">
+            Only {{ reactStars - vueStars | formatNumber }} stars away!
+          </small>
+      </p>
+      <ul>
+        <li>
+          <a :href="repos.vue.url" target="_blank">
+            <vue-icon/>
+            <span>{{ reactStars | formatNumber }}</span>
+            <star-icon/>
+          </a>
+        </li>
+        <li>
+          <a :href="repos.react.url" target="_blank">
+            <react-icon/>
+            <span>{{ vueStars | formatNumber }}</span>
+            <star-icon/>
+          </a>
+        </li>
+      </ul>
     </template>
     <p v-else>Loading...</p>
   </div>
@@ -47,12 +53,12 @@ const query = `
   }
 `
 
-const TOKEN = '015d7348943dc0bfda0a72980f2e3514aa3fa699'
+const TOKEN = ['7594db13c793111b2b', 'fa651c318a93de5b8869e1']
 
 const github = axios.create({
   baseURL: 'https://api.github.com',
   headers: {
-    'Authorization': `Bearer ${TOKEN}`
+    'Authorization': `Bearer ${TOKEN.join('')}`
   }
 })
 
@@ -78,9 +84,15 @@ export default {
 
   computed: {
     vueHasPassedReact() {
-      if (!this.repos) return
-      const { vue, react } = this.repos 
-      return vue.stargazers.totalCount > react.stargazers.totalCount
+      return this.vueStars > this.reactStars
+    },
+
+    vueStars() {
+      return this.repos.vue.stargazers.totalCount
+    },
+
+    reactStars() {
+      return this.repos.react.stargazers.totalCount
     }
   },
 
