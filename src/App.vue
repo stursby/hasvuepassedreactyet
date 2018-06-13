@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <github-corner/>
     <p>Has Vue passed React yet?</p>
     <template v-if="repos">
     <h1>{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
@@ -26,6 +27,7 @@
 
 <script>
 import axios from 'axios'
+import GithubCorner from './components/GithubCorner'
 import { VueIcon, ReactIcon, StarIcon } from './components/icons'
 
 const query = `
@@ -45,7 +47,7 @@ const query = `
   }
 `
 
-const TOKEN = '419047f56c39f1271082ef149b88dee2cd2f2f70'
+const TOKEN = '015d7348943dc0bfda0a72980f2e3514aa3fa699'
 
 const github = axios.create({
   baseURL: 'https://api.github.com',
@@ -66,7 +68,8 @@ export default {
   components: {
     VueIcon,
     ReactIcon,
-    StarIcon
+    StarIcon,
+    GithubCorner
   },
 
   mounted() {
