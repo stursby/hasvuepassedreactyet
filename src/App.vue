@@ -14,14 +14,14 @@
         <li>
           <a :href="repos.vue.url" target="_blank">
             <vue-icon/>
-            <span>{{ reactStars | formatNumber }}</span>
+            <span>{{ vueStars | formatNumber }}</span>
             <star-icon/>
           </a>
         </li>
         <li>
           <a :href="repos.react.url" target="_blank">
             <react-icon/>
-            <span>{{ vueStars | formatNumber }}</span>
+            <span>{{ reactStars | formatNumber }}</span>
             <star-icon/>
           </a>
         </li>
