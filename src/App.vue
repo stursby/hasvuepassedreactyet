@@ -5,10 +5,9 @@
     <template v-if="repos">
       <h1>{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
       <p>
-        <small
-          v-if="!vueHasPassedReact">
-            Only {{ reactStars - vueStars | formatNumber }} stars away!
-          </small>
+        <small v-if="!vueHasPassedReact">
+          Only {{ reactStars - vueStars | formatNumber }} stars away!
+        </small>
       </p>
       <ul>
         <li>
@@ -36,31 +35,7 @@ import axios from 'axios'
 import GithubCorner from './components/GithubCorner'
 import { VueIcon, ReactIcon, StarIcon } from './components/icons'
 
-const query = `
-  query {
-    react: repository(owner: "facebook", name: "react") {
-      url
-      stargazers(first: 1) {
-        totalCount
-      }
-    }
-    vue: repository(owner: "vuejs", name: "vue") {
-      url
-      stargazers(first:1) {
-        totalCount
-      }
-    }
-  }
-`
-
-const TOKEN = ['7594db13c793111b2b', 'fa651c318a93de5b8869e1']
-
-const github = axios.create({
-  baseURL: 'https://api.github.com',
-  headers: {
-    'Authorization': `Bearer ${TOKEN.join('')}`
-  }
-})
+const FUNCTIONS_ENDPOINT = 'https://wt-13e53fa81a1f88b8fd161c9e57aeaac4-0.sandbox.auth0-extend.com/fetchGithubStars'
 
 export default {
   name: 'App',
@@ -105,7 +80,7 @@ export default {
   methods: {
     async fetchRepos() {
       try {
-        const { data: res } = await github.post('graphql', { query })
+        const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
         this.repos = res.data
       } catch (err) {
         console.log(err)

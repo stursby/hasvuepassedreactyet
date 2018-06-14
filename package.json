@@ -7,7 +7,8 @@
     "dev": "yarn serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "surge -p dist -d https://hasvuepassedreactyet.surge.sh"
+    "deploy": "surge -p dist -d https://hasvuepassedreactyet.surge.sh",
+    "wt:update": "cd functions && wt update fetchGithubStars fetchGithubStars.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
