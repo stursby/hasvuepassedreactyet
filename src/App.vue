@@ -5,6 +5,7 @@
     <template v-if="repos">
       <h1 v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
       <h1 v-else>TIE!</h1>
+      <p class="left" v-if="!vueHasPassedReact">left: {{ left }}</p>
       <p>
         <small v-if="!vueHasPassedReact && !tie" class="away">
           Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
@@ -83,6 +84,9 @@ export default {
     },
     tie() {
       return this.vueStars === this.reactStars
+    },
+    left() {
+      return this.reactStars - this.vueStars; 
     }
   },
 
@@ -242,6 +246,10 @@ p {
 
 .reloading {
   animation: rotate 1s infinite ease-in-out;
+}
+
+.left {
+  padding-bottom: 15px;
 }
 
 @keyframes rotate {
