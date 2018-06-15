@@ -6,7 +6,7 @@
       <h1>{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
       <p>
         <small v-if="!vueHasPassedReact">
-          Only {{ reactStars - vueStars + 1 | formatNumber }} stars away!
+          Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
         </small>
       </p>
       <ul>
