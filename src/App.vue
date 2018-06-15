@@ -3,9 +3,10 @@
     <github-corner/>
     <p>Has Vue passed React yet?</p>
     <template v-if="repos">
-      <h1>{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
+      <h1 v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
+      <h1 v-else>TIE!</h1>
       <p>
-        <small v-if="!vueHasPassedReact">
+        <small v-if="!vueHasPassedReact && !tie" class="away">
           Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
         </small>
       </p>
@@ -25,6 +26,9 @@
           </a>
         </li>
       </ul>
+      <span class="reload" :class="{ reloading }" @click="reload">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="#333333" d="M19 8l-4 4h3c0 3.31-2.69 6-6 6a5.87 5.87 0 0 1-2.8-.7l-1.46 1.46A7.93 7.93 0 0 0 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46A7.93 7.93 0 0 0 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+      </span>
     </template>
     <template v-else-if="error">
       <h1 class="error">Error</h1>
@@ -39,6 +43,7 @@
 
 <script>
 import axios from 'axios'
+import CountUp from 'countup.js'
 import GithubCorner from './components/GithubCorner'
 import { VueIcon, ReactIcon, StarIcon } from './components/icons'
 
@@ -50,7 +55,8 @@ export default {
   data() {
     return {
       repos: null,
-      error: false
+      error: false,
+      reloading: false
     }
   },
 
@@ -76,6 +82,9 @@ export default {
 
     reactStars() {
       return this.repos.react.stargazers.totalCount
+    },
+    tie() {
+      return this.vueStars === this.reactStars
     }
   },
 
@@ -89,7 +98,6 @@ export default {
     async fetchRepos() {
       try {
         const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
-
         if (res.errors && res.errors.length) {
           this.error = true
           this.repos = null
@@ -103,6 +111,15 @@ export default {
         // eslint-disable-next-line
         console.log(err)
       }
+    },
+
+    async reload() {
+      if (this.reloading) return
+      this.reloading = true
+      await this.fetchRepos()
+      setTimeout(() => {
+        this.reloading = false
+      }, 900)
     }
   }
 }
@@ -112,6 +129,13 @@ export default {
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(0,0,0,0);
+}
+::-moz-selection {
+  background: rgba(0,0,0,0);
 }
 
 html, body {
@@ -137,6 +161,7 @@ body {
   background: #ffffff;
   box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
   overflow: hidden;
+  position: relative;
 }
 
 h1 {
@@ -185,8 +210,49 @@ li:last-of-type {
 h1.error {
   font-size: 2em;
 }
+
 p {
   padding: 0 1em;
+}
+
+.away {
+  display: block;
+  margin-bottom: 40px;
+}
+
+.reload {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  margin-left: -20px;
+  background: #ffffff;
+  width: 40px;
+  height: 40px;
+  text-align: middle;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+}
+
+.reload:hover {
+  cursor: pointer;
+  background: #eeeeee;
+}
+
+.reloading {
+  animation: rotate 1s infinite ease-in-out;
+}
+
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(-360deg);
+  }
 }
 
 </style>
