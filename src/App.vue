@@ -223,7 +223,7 @@ p {
   position: absolute;
   left: 50%;
   bottom: 30px;
-  margin-left: -18px;
+  margin-left: -20px;
   background: #ffffff;
   width: 40px;
   height: 40px;
