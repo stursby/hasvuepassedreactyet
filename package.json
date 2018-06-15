@@ -11,7 +11,6 @@
     "wt:update": "cd functions && wt update fetchGithubStars fetchGithubStars.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "vue": "^2.5.16"
   },
   "devDependencies": {

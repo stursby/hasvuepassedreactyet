@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import GithubCorner from './components/GithubCorner'
 import { VueIcon, ReactIcon, StarIcon } from './components/icons'
 
@@ -96,15 +95,15 @@ export default {
   methods: {
     async fetchRepos() {
       try {
-        const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
-        if (res.errors && res.errors.length) {
+        const { data } = await fetch(FUNCTIONS_ENDPOINT).then(res => res.json())
+        if (data.errors && data.errors.length) {
           this.error = true
           this.repos = null
           // eslint-disable-next-line
-          console.log(res.errors)
+          console.log(data.errors)
         } else {
           this.error = true
-          this.repos = res.data
+          this.repos = data
         }
       } catch (err) {
         // eslint-disable-next-line
