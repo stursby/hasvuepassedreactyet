@@ -110,6 +110,10 @@ export default {
 
 <style>
 
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -132,6 +136,7 @@ body {
   border-radius: 4px;
   background: #ffffff;
   box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+  overflow: hidden;
 }
 
 h1 {
@@ -148,7 +153,6 @@ ul {
 li {
   list-style-type: none;
   flex: 1;
-  
 }
 
 li a {
