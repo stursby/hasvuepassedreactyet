@@ -3,8 +3,8 @@
     <github-corner/>
     <p>Has Vue passed React yet?</p>
     <template v-if="repos">
-      <h1 v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
-      <h1 v-else>TIE!</h1>
+      <h1 :class="{ pad: vueHasPassedReact }" v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
+      <h1 :class="{ pad: vueHasPassedReact }" v-else>TIE!</h1>
       <p>
         <small v-if="!vueHasPassedReact && !tie" class="away">
           Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
@@ -210,6 +210,10 @@ h1.error {
   font-size: 2em;
 }
 
+h1.pad {
+  margin-bottom: 30px;
+}
+
 p {
   padding: 0 1em;
 }
@@ -247,10 +251,10 @@ p {
 
 @keyframes rotate {
   from {
-    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to { 
-    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
   }
 }
 
