@@ -5,6 +5,7 @@
     <template v-if="repos">
       <h1 v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
       <h1 v-else>TIE!</h1>
+      <p class="left" v-if="!vueHasPassedReact">left: {{ left }}</p>
       <p>
         <small v-if="!vueHasPassedReact && !tie" class="away">
           Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
@@ -42,7 +43,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import GithubCorner from './components/GithubCorner'
 import { VueIcon, ReactIcon, StarIcon } from './components/icons'
 
@@ -84,6 +84,9 @@ export default {
     },
     tie() {
       return this.vueStars === this.reactStars
+    },
+    left() {
+      return this.reactStars - this.vueStars; 
     }
   },
 
@@ -96,15 +99,15 @@ export default {
   methods: {
     async fetchRepos() {
       try {
-        const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
-        if (res.errors && res.errors.length) {
+        const { data } = await fetch(FUNCTIONS_ENDPOINT).then(res => res.json())
+        if (data.errors && data.errors.length) {
           this.error = true
           this.repos = null
           // eslint-disable-next-line
-          console.log(res.errors)
+          console.log(data.errors)
         } else {
           this.error = true
-          this.repos = res.data
+          this.repos = data
         }
       } catch (err) {
         // eslint-disable-next-line
@@ -243,6 +246,10 @@ p {
 
 .reloading {
   animation: rotate 1s infinite ease-in-out;
+}
+
+.left {
+  padding-bottom: 15px;
 }
 
 @keyframes rotate {
