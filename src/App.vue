@@ -26,6 +26,13 @@
         </li>
       </ul>
     </template>
+    <template v-else-if="error">
+      <h1 class="error">Error</h1>
+      <p>
+        Couldn't retrieve any data.
+        The API rate limits might have kicked in. Just wait a bit and try again.
+      </p>
+    </template>
     <p v-else>Loading...</p>
   </div>
 </template>
@@ -42,7 +49,8 @@ export default {
 
   data() {
     return {
-      repos: null
+      repos: null,
+      error: false
     }
   },
 
@@ -81,8 +89,18 @@ export default {
     async fetchRepos() {
       try {
         const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
-        this.repos = res.data
+
+        if (res.errors && res.errors.length) {
+          this.error = true
+          this.repos = null
+          // eslint-disable-next-line
+          console.log(res.errors)
+        } else {
+          this.error = true
+          this.repos = res.data
+        }
       } catch (err) {
+        // eslint-disable-next-line
         console.log(err)
       }
     }
@@ -158,6 +176,13 @@ li a > * {
 
 li:last-of-type {
   border-left: 1px solid #dddddd;
+}
+
+h1.error {
+  font-size: 2em;
+}
+p {
+  padding: 0 1em;
 }
 
 </style>
