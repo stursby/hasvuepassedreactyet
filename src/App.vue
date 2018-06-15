@@ -25,6 +25,13 @@
           </a>
         </li>
       </ul>
+      <p>What about <a :href="repos.angular.url" target="_blank">angular</a>?</p>
+      <ul>
+        <li>
+            <span>{{ angularStars | formatNumber }}</span>
+            <star-icon/>
+        </li>
+      </ul>
     </template>
     <p v-else>Loading...</p>
   </div>
@@ -68,7 +75,12 @@ export default {
 
     reactStars() {
       return this.repos.react.stargazers.totalCount
+    },
+
+    angularStarts() {
+      return this.repos.angular.stargazers.totalCount
     }
+
   },
 
   filters: {
@@ -130,7 +142,7 @@ ul {
 li {
   list-style-type: none;
   flex: 1;
-  
+
 }
 
 li a {

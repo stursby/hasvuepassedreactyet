@@ -16,11 +16,17 @@ const query = `
         totalCount
       }
     }
+    angular: repository(owner: "angular", name: "angular") {
+      url
+      stargazers {
+        totalCount
+      }
+    }
   }
 `
 
 module.exports = (ctx, cb) => {
-  
+
   // Github access token
   const { GITHUB_TOKEN } = ctx.secrets
 
@@ -36,5 +42,5 @@ module.exports = (ctx, cb) => {
   github.post('graphql', { query }).then(res => {
     cb(null, res.data)
   })
-  
+
 }
