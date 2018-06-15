@@ -43,7 +43,6 @@
 
 <script>
 import axios from 'axios'
-import CountUp from 'countup.js'
 import GithubCorner from './components/GithubCorner'
 import { VueIcon, ReactIcon, StarIcon } from './components/icons'
 
