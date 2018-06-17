@@ -91,10 +91,6 @@ export default {
 
     tie() {
       return this.vueStars === this.reactStars
-    },
-
-    pad() {
-      return !this.vueHasPassedReact || this.tie
     }
   },
 
