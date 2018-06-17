@@ -3,8 +3,8 @@
     <github-corner/>
     <p>Has Vue passed React yet?</p>
     <template v-if="repos">
-      <h1 :class="{ pad }" v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
-      <h1 :class="{ pad }" v-else>TIE!</h1>
+      <h1 v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
+      <h1 :class="{ pad : tie }" v-else>TIE!</h1>
       <p>
         <small v-if="!vueHasPassedReact && !tie" class="away">
           Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
@@ -94,7 +94,7 @@ export default {
     },
 
     pad() {
-      return this.vueHasPassedReact || this.tie
+      return !this.vueHasPassedReact || this.tie
     }
   },
 
@@ -187,7 +187,7 @@ ul {
 
 li {
   list-style-type: none;
-  flex: 1;
+  width: 50%;
 }
 
 li a {
@@ -237,7 +237,7 @@ p {
 .reload {
   position: absolute;
   left: 50%;
-  margin-left: -16px;
+  margin-left: -20px;
   bottom: 30px;
   background: #ffffff;
   width: 40px;
