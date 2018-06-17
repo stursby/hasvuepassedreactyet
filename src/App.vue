@@ -9,7 +9,7 @@
         <small v-if="!vueHasPassedReact && !tie" class="away">
           Only {{ reactStars - vueStars | formatNumber }} {{ reactStars - vueStars === 1 ? 'star' : 'stars'}} away!
         </small>
-        <small v-else-if="vueHasPassedReact && !tie" class="away">
+        <small v-else-if="vueHasPassedReact && !tie" class="ahead">
           Ahead by {{ vueStars - reactStars | formatNumber }} {{ vueStars - reactStars === 1 ? 'star' : 'stars'}}!
         </small>
       </p>
@@ -229,7 +229,7 @@ p {
   padding: 0 1em;
 }
 
-.away {
+.away, .ahead {
   display: block;
   margin-bottom: 40px;
 }
