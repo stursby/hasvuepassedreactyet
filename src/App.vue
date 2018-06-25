@@ -32,6 +32,10 @@
       <span class="reload" @click="reload">
         <svg :class="{ reloading }" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="#333333" d="M19 8l-4 4h3c0 3.31-2.69 6-6 6a5.87 5.87 0 0 1-2.8-.7l-1.46 1.46A7.93 7.93 0 0 0 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46A7.93 7.93 0 0 0 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
       </span>
+      <aside class="psst">
+        <div class="psst-message">Psst..</div>
+        <AngularIcon/>
+      </aside>
     </template>
     <template v-else-if="error">
       <h1 class="error">Error</h1>
@@ -47,7 +51,7 @@
 <script>
 import axios from 'axios'
 import GithubCorner from './components/GithubCorner'
-import { VueIcon, ReactIcon, StarIcon } from './components/icons'
+import { VueIcon, AngularIcon, ReactIcon, StarIcon } from './components/icons'
 
 const FUNCTIONS_ENDPOINT = 'https://wt-13e53fa81a1f88b8fd161c9e57aeaac4-0.sandbox.auth0-extend.com/fetchGithubStars'
 
@@ -64,6 +68,7 @@ export default {
 
   components: {
     VueIcon,
+    AngularIcon,
     ReactIcon,
     StarIcon,
     GithubCorner
@@ -166,7 +171,7 @@ body {
   border-radius: 4px;
   background: #ffffff;
   box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
-  overflow: hidden;
+  /* overflow: hidden; */
   position: relative;
 }
 
@@ -256,6 +261,16 @@ p {
 
 .reloading {
   animation: rotate 1s infinite ease-in-out;
+}
+
+.psst {
+  position: absolute;
+  right: -25px;
+  width: 40px;
+  height: auto;
+  bottom: 40px;
+  transform: rotate(15deg);
+  z-index: -1;
 }
 
 @keyframes rotate {
