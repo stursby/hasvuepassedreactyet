@@ -15,14 +15,14 @@
       </p>
       <ul>
         <li>
-          <a :href="repos.vue.url" target="_blank">
+          <a :href="repos.vue.html_url" target="_blank">
             <vue-icon/>
             <span>{{ vueStars | formatNumber }}</span>
             <star-icon/>
           </a>
         </li>
         <li>
-          <a :href="repos.react.url" target="_blank">
+          <a :href="repos.react.html_url" target="_blank">
             <react-icon/>
             <span>{{ reactStars | formatNumber }}</span>
             <star-icon/>
@@ -45,106 +45,119 @@
 </template>
 
 <script>
-import axios from 'axios'
-import GithubCorner from './components/GithubCorner'
-import { VueIcon, ReactIcon, StarIcon } from './components/icons'
+import axios from "axios";
+import GithubCorner from "./components/GithubCorner";
+import { VueIcon, ReactIcon, StarIcon } from "./components/icons";
 
-const FUNCTIONS_ENDPOINT = 'https://wt-13e53fa81a1f88b8fd161c9e57aeaac4-0.sandbox.auth0-extend.com/fetchGithubStars'
-
+// const FUNCTIONS_ENDPOINT =
+//   "https://wt-13e53fa81a1f88b8fd161c9e57aeaac4-0.sandbox.auth0-extend.com/fetchGithubStars";
+const REACT_REPOSITORY_DETAIL_ENDPOINT =
+  "https://api.github.com/repos/facebook/react";
+const VUE_REPOSITORY_DETAIL_ENDPOINT = "https://api.github.com/repos/vuejs/vue";
 export default {
-  name: 'App',
+  name: "App",
 
   data() {
     return {
       repos: null,
       error: false,
-      reloading: false
-    }
+      reloading: false,
+    };
   },
 
   components: {
     VueIcon,
     ReactIcon,
     StarIcon,
-    GithubCorner
+    GithubCorner,
   },
 
   mounted() {
-    this.fetchRepos()
-    if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
-      document.body.classList.remove('no-touch')
+    this.fetchRepos();
+    if ("ontouchstart" in window || navigator.msMaxTouchPoints) {
+      document.body.classList.remove("no-touch");
     }
   },
 
   computed: {
     vueHasPassedReact() {
-      return this.vueStars > this.reactStars
+      return this.vueStars > this.reactStars;
     },
 
     vueStars() {
-      return this.repos.vue.stargazers.totalCount
+      return this.repos.vue.stargazers_count;
     },
 
     reactStars() {
-      return this.repos.react.stargazers.totalCount
+      return this.repos.react.stargazers_count;
     },
 
     tie() {
-      return this.vueStars === this.reactStars
-    }
+      return this.vueStars === this.reactStars;
+    },
   },
 
   filters: {
     formatNumber(number) {
-      return new Intl.NumberFormat().format(number)
-    }
+      return new Intl.NumberFormat().format(number);
+    },
   },
 
   methods: {
     async fetchRepos() {
       try {
-        const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
-        if (res.errors && res.errors.length) {
-          this.error = true
-          this.repos = null
+        const reactResponse = await axios.get(REACT_REPOSITORY_DETAIL_ENDPOINT);
+        const vueResponse = await axios.get(VUE_REPOSITORY_DETAIL_ENDPOINT);
+        if (
+          (reactResponse.errors && reactResponse.errors.length) ||
+          (vueResponse.errors && vueResponse.errors.length)
+        ) {
+          this.error = true;
+          this.repos = {};
           // eslint-disable-next-line
-          console.log(res.errors)
+          console.log({
+            reactRequestError: reactResponse.errors,
+            vueRequestError: vueResponse.errors,
+          });
         } else {
-          this.error = true
-          this.repos = res.data
+          this.error = true;
+          this.repos = {
+            vue: vueResponse.data,
+            react: reactResponse.data,
+          };
         }
       } catch (err) {
         // eslint-disable-next-line
-        console.log(err)
+        console.log(err);
       }
     },
 
     async reload() {
-      if (this.reloading) return
-      this.reloading = true
-      await this.fetchRepos()
+      if (this.reloading) return;
+      this.reloading = true;
+      await this.fetchRepos();
       setTimeout(() => {
-        this.reloading = false
-      }, 900)
-    }
-  }
-}
+        this.reloading = false;
+      }, 900);
+    },
+  },
+};
 </script>
 
 <style>
-
 * {
   box-sizing: border-box;
 }
 
 ::selection {
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
 }
 ::-moz-selection {
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -154,7 +167,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   text-align: center;
   color: #333;
   background: #efefef;
@@ -165,7 +179,7 @@ body {
   border: 1px solid #dddddd;
   border-radius: 4px;
   background: #ffffff;
-  box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
   overflow: hidden;
   position: relative;
 }
@@ -225,7 +239,8 @@ p {
   padding: 0 1em;
 }
 
-.away, .ahead {
+.away,
+.ahead {
   display: block;
   margin-bottom: 40px;
 }
@@ -262,9 +277,8 @@ p {
   from {
     transform: rotate(0deg);
   }
-  to { 
+  to {
     transform: rotate(-360deg);
   }
 }
-
 </style>
